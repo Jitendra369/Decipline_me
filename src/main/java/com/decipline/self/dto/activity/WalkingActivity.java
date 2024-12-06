@@ -9,9 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue("WALKING")
-public class WalkingActivity extends ActivityId {
+public class WalkingActivity extends Activity {
 
-    private String sportType;
-    private boolean active;
+    private float distanceTravel;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id", nullable = true)
+    private Activity activity;
+
 }

@@ -1,6 +1,8 @@
 package com.decipline.self.service;
 
 import com.decipline.self.dto.RefActivityTypeDto;
+import com.decipline.self.dto.activity.WalkingActivity;
+import com.decipline.self.entities.Today;
 import com.decipline.self.repo.ActivityRepository;
 import com.decipline.self.dto.ActivityTotalCountDto;
 import com.decipline.self.entities.Activity;
@@ -26,20 +28,21 @@ public class ActivityService {
     public Activity addActivity(Activity activity){
 
 //        for previous date
-        if (activity.getCreatedDate() == null){
-            activity.setCreatedDate(new Date());
-        }
-        Activity saveActivity = activityRepository.save(activity);
-        return saveActivity;
-    }
-
-    public List<Activity> getAllActivity(){
-        List<Activity> allActivityList = activityRepository.findAll();
-        if (!allActivityList.isEmpty()){
-            List<Activity> sortedCreatedDateActivities = allActivityList.stream().sorted(Comparator.comparing(Activity::getCreatedDate).reversed()).toList();
-            return sortedCreatedDateActivities;
-        }
-        return new ArrayList<>();
+//        if (activity.getCreatedDate() == null){
+//            activity.setCreatedDate(new Date());
+//        }
+//        Activity saveActivity = activityRepository.save(activity);
+//        return saveActivity;
+//    }
+//
+//    public List<Activity> getAllActivity(){
+//        List<Activity> allActivityList = activityRepository.findAll();
+//        if (!allActivityList.isEmpty()){
+//            List<Activity> sortedCreatedDateActivities = allActivityList.stream().sorted(Comparator.comparing(Activity::getCreatedDate).reversed()).toList();
+//            return sortedCreatedDateActivities;
+//        }
+//        return new ArrayList<>();
+        return null;
     }
 
 //    sorted list
@@ -95,6 +98,16 @@ public class ActivityService {
             refList.add(refActivityTypeDto);
         });
         return refList;
+    }
+
+    public Activity saveActivity(WalkingActivity walkingActivity){
+        Activity activity = new Activity();
+        Today today = new Today();
+        today.setCreatedDate(new Date());
+        activity.setToday(today);
+        walkingActivity.setToday(today);
+        walkingActivity.setActivity(activity);
+        return activityRepository.save(walkingActivity);
     }
 }
 

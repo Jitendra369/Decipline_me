@@ -1,5 +1,6 @@
 package com.decipline.self.entities;
 
+import com.decipline.self.dto.activity.WalkingActivity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,29 +9,30 @@ import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Activity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private int id;
 
-    private int walkingSteps;
-    private int pushUps;
-    private boolean reading;
-    private boolean writing;
-    private String written_text;
-    private int weight;
-    private boolean selfAnalysis;
-    private String excuse;
+    private String name;
 
-    private Date createdDate;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="today_id", foreignKey = @ForeignKey(name = "FK_activity_today"))
+    private Today today;
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.PERSIST)
+    private List<WalkingActivity> walkingActivities;
 
     @UpdateTimestamp
-    private Date updatedDate;
+    private Date createDate;
 
 }

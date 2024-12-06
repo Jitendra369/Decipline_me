@@ -2,11 +2,13 @@ package com.decipline.self.controller;
 
 import com.decipline.self.dto.ActivityTotalCountDto;
 import com.decipline.self.dto.RefActivityTypeDto;
+import com.decipline.self.dto.activity.WalkingActivity;
 import com.decipline.self.entities.Activity;
 import com.decipline.self.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +27,8 @@ public class ActivityController {
 
     @GetMapping("/all")
     public List<Activity> getAllActivity(){
-        return activityService.getAllActivity();
+//        return activityService.getAllActivity();
+        return new ArrayList<>();
     }
 
     @GetMapping("/{id}")
@@ -58,5 +61,10 @@ public class ActivityController {
     @GetMapping("/ref_activity")
     public List<RefActivityTypeDto> getAllRefActivityType(){
         return activityService.getActivityType();
+    }
+
+    @PostMapping("/save/wa")
+    public Activity saveActivity(WalkingActivity walkingActivity){
+        return activityService.saveActivity(walkingActivity);
     }
 }
