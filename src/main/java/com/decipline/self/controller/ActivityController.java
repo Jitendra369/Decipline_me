@@ -2,69 +2,46 @@ package com.decipline.self.controller;
 
 import com.decipline.self.dto.ActivityTotalCountDto;
 import com.decipline.self.dto.RefActivityTypeDto;
-import com.decipline.self.dto.activity.WalkingActivity;
+import com.decipline.self.entities.ReadingActivity;
+import com.decipline.self.entities.WalkingActivity;
 import com.decipline.self.entities.Activity;
 import com.decipline.self.service.ActivityService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/core/activity")
 @CrossOrigin("*")
+@Slf4j
 public class ActivityController {
 
     private final ActivityService activityService;
 
-    @PostMapping()
-    public Activity addActivity(@RequestBody Activity activity){
-        return activityService.addActivity(activity);
+    @PostMapping("/walk")
+    public WalkingActivity saveWalkingAct(@RequestBody WalkingActivity walkingActivity){
+        return activityService.saveWalkActi(walkingActivity);
     }
 
-    @GetMapping("/all")
-    public List<Activity> getAllActivity(){
-//        return activityService.getAllActivity();
-        return new ArrayList<>();
+    @PostMapping("/read")
+    public ReadingActivity saveReadingActi(@RequestBody ReadingActivity readingActivity){
+        return activityService.saveReadingActi(readingActivity);
     }
 
     @GetMapping("/{id}")
-    public Activity findActivity(@PathVariable int id){
-        return activityService.findActivityById(id);
+    public Object getActivityById(@PathVariable int id){
+        Optional<? extends Activity> activity = activityService.getActivity(id);
+        if (activity.isPresent()){
+            log.info("No activity present with Id " + id);
+            return activity.get();
+        }
+        return Optional.empty();
     }
 
-    @GetMapping("/checkNextWeightDate")
-    public String checkNextWeightDate(){
-        return activityService.getNextWeightReadingDate();
-    }
-
-    @GetMapping("/all/walking")
-    public int getAllWalkingSteps(){
-        int allWalkingSteps = this.activityService.getAllWalkingSteps();
-        return allWalkingSteps;
-    }
-
-    @GetMapping("/count/all")
-    public ActivityTotalCountDto countActivityAll(){
-        ActivityTotalCountDto totalActivityCount = this.activityService.getTotalActivityCount();
-        return totalActivityCount;
-    }
-
-    @GetMapping("/reading/dates")
-    public List<Date> findReadingCountDate(){
-        return activityService.findReadingDate();
-    }
-
-    @GetMapping("/ref_activity")
-    public List<RefActivityTypeDto> getAllRefActivityType(){
-        return activityService.getActivityType();
-    }
-
-    @PostMapping("/save/wa")
-    public Activity saveActivity(WalkingActivity walkingActivity){
-        return activityService.saveActivity(walkingActivity);
-    }
 }

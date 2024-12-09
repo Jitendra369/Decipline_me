@@ -1,0 +1,26 @@
+**************************** API **************************************
+
+http://localhost:8080/api/core/book/view
+{
+    "bookName":"Motor cycle dyary",
+    "authorName":"che gavera",
+    "bookType":"Biography",
+    "bookReview":"will BookReview"
+}
+
+http://localhost:8080/api/core/activity/walk
+{
+    "distanceTravel":"8000",
+    "time":"1"
+}
+
+
+http://localhost:8080/api/core/activity/read
+{
+    "bookName":"che gavera",
+    "pageNumber":"109",
+    "note":"he visted to south america"
+
+}
+
+

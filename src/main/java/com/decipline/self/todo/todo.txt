@@ -1,0 +1,1 @@
+-- add entity dynamically and create table , so that at the time of creating an activity dynamically create the entity
