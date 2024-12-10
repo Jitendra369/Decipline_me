@@ -16,14 +16,14 @@ import java.util.Date;
 public class ReadingActivity extends Activity {
 
     private String bookName;
-    private int pageNumber;
+    private Integer pageNumber;
     private String note;
 
     @Column(name = "end_read_dte")
-    private boolean completedReading;
+    private Boolean completedReading;
 
     @Column(name = "stp_read")
-    private boolean stopReadingBook;
+    private Boolean stopReadingBook;
 
     @Column(name = "srt_read_dte")
     @CreationTimestamp

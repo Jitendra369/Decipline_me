@@ -25,4 +25,10 @@ public class ExerciseActivityController {
     public List<Book> viewAllBooks(){
         return bookService.viewAllBooks();
     }
+
+
+    @GetMapping("/types")
+    public List<String> findAlllBookType(){
+        return bookService.getBookTypes();
+    }
 }

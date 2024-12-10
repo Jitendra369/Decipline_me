@@ -1,9 +1,6 @@
 package com.decipline.self.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -25,4 +22,7 @@ public class Book {
     private String bookType;
 
     private String bookReview;
+
+    @Transient
+    private String newBookType;
 }

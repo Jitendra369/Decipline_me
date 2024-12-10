@@ -57,7 +57,6 @@ public class ActivityService {
             if (readingActivity.getId() == 0) {
                 return null;
             }
-
             Optional<? extends Activity> readActOptional =  getActivity(readingActivity.getId());
             if (readActOptional.isPresent()) {
                 ReadingActivity activity = (ReadingActivity) readActOptional.get();
@@ -97,6 +96,17 @@ public class ActivityService {
             e.printStackTrace();
             log.error("Exception while saving the reading Activity ");
         } return null;
+    }
+
+    public List<ReadingActivity> getAllReadingActivities() {
+        List<ReadingActivity> allReadingActivity = new ArrayList<>();
+        try {
+            return activityRepository.findAllReadingActivity();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("exception while getting all the reading Activities");
+        }
+        return allReadingActivity;
     }
 }
 

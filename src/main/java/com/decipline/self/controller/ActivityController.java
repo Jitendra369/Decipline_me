@@ -44,4 +44,9 @@ public class ActivityController {
         return Optional.empty();
     }
 
+    @GetMapping("/read/all")
+    public List<ReadingActivity> getAllReadingActivities(){
+        return activityService.getAllReadingActivities();
+    }
+
 }
