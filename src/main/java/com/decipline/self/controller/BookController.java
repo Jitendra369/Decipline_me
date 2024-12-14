@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/core/book")
 @CrossOrigin("*")
-public class ExerciseActivityController {
+public class BookController {
 
     private final BookService bookService;
 
@@ -30,5 +30,10 @@ public class ExerciseActivityController {
     @GetMapping("/types")
     public List<String> findAlllBookType(){
         return bookService.getBookTypes();
+    }
+
+    @GetMapping("/view/{id}")
+    public Book getBook(@PathVariable int id){
+        return bookService.getBook(id);
     }
 }

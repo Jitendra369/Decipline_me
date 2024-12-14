@@ -3,10 +3,12 @@ package com.decipline.self.repo;
 import com.decipline.self.dto.RefActivityTypeDto;
 import com.decipline.self.entities.Activity;
 import com.decipline.self.entities.ReadingActivity;
+import com.decipline.self.entities.WeightActivity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -32,5 +34,11 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
     @Query("SELECT r FROM ReadingActivity r")
     List<ReadingActivity> findAllReadingActivity();
+
+    @Query("SELECT w From WeightActivity w Where w.createDate = :date")
+    List<WeightActivity> getCurrentDateWeightActivity(@Param("date") Date date);
+
+    @Query("SELECT r FROM WeightActivity r")
+    List<WeightActivity> getAllWeightActivities();
 
 }

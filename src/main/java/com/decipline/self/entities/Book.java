@@ -25,4 +25,8 @@ public class Book {
 
     @Transient
     private String newBookType;
+
+    @Column(name = "is_read")
+    private Boolean readDone;
+
 }

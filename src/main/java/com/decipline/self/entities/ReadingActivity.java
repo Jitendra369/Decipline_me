@@ -35,9 +35,8 @@ public class ReadingActivity extends Activity {
     @Column(name = "pus_read")
     private Boolean pauseReadingBook;
 
-//    @OneToOne
-//    @JoinColumn(name = "book_id")
-//    private Book book;
-
+   @OneToOne
+   @JoinTable(name ="book_id")
+   private Book book;
 
 }
