@@ -2,10 +2,7 @@ package com.decipline.self.controller;
 
 import com.decipline.self.dto.ActivityTotalCountDto;
 import com.decipline.self.dto.RefActivityTypeDto;
-import com.decipline.self.entities.ReadingActivity;
-import com.decipline.self.entities.WalkingActivity;
-import com.decipline.self.entities.Activity;
-import com.decipline.self.entities.WeightActivity;
+import com.decipline.self.entities.*;
 import com.decipline.self.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +27,9 @@ public class ActivityController {
         return activityService.saveWalkActi(walkingActivity);
     }
 
+//    save reading activity
     @PostMapping("/read")
     public ReadingActivity saveReadingActi(@RequestBody ReadingActivity readingActivity){
-//        throw new RuntimeException("asdasd");
         return activityService.saveReadingActi(readingActivity);
     }
 
@@ -59,6 +56,16 @@ public class ActivityController {
     @GetMapping("/weight/view/all")
     public List<WeightActivity> viewAllWeightActivities(){
         return activityService.viewAllWeightActivities();
+    }
+
+    @GetMapping("/read/hist")
+    public List<ReadHistory> viewAllReadHistory(){
+        return activityService.getAllReadHistory();
+    }
+
+    @DeleteMapping("/weight/{id}")
+    public void deleteWeightActivity(@PathVariable int id ){
+        activityService.deleteWeightActivity(id);
     }
 
 

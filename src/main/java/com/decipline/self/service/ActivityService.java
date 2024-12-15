@@ -1,13 +1,12 @@
 package com.decipline.self.service;
 
 import com.decipline.self.dto.RefActivityTypeDto;
-import com.decipline.self.entities.ReadingActivity;
-import com.decipline.self.entities.WalkingActivity;
-import com.decipline.self.entities.WeightActivity;
+import com.decipline.self.entities.*;
+import com.decipline.self.errors.ResourceNotFoundException;
 import com.decipline.self.repo.ActivityRepository;
 import com.decipline.self.dto.ActivityTotalCountDto;
-import com.decipline.self.entities.Activity;
 import com.decipline.self.persistance.ActivityDAO;
+import com.decipline.self.repo.ReadHistoryRepo;
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +26,8 @@ public class ActivityService {
     public static final String UPDATED_DATE = "updatedDate";
     private final ActivityRepository activityRepository;
     private final ActivityDAO activityDAO;
+
+    private final ReadHistoryRepo readHistoryRepo;
 
 
     public String getNextWeightReadingDate() {
@@ -67,20 +68,28 @@ public class ActivityService {
                     if (activity != null) {
                         processDatesForAct(activity);
                         updateEntity(activity, readingActivity);
-                        return activityRepository.save(activity);
+                        ReadingActivity save = activityRepository.save(activity);
+                        if (save != null) {
+                            addToHistory(activity, false);
+                        }
                     }
                 }
-            }
-//            processDatesForAct(readingActivity);
-            Optional<Activity> saveActivityOptional = activityRepository.findById(readingActivity.getId());
-            if (saveActivityOptional.isPresent()){
-                Activity activity = saveActivityOptional.get();
-                if (activity!=null){
-                    activityRepository.save(activity);
+            } else {
+                //            processDatesForAct(readingActivity);
+                Optional<Activity> saveActivityOptional = activityRepository.findById(readingActivity.getId());
+                if (saveActivityOptional.isPresent()) {
+                    Activity activity = saveActivityOptional.get();
+                    if (activity != null) {
+                        ReadingActivity readingAct = (ReadingActivity) activityRepository.save(activity);
+                        if (readingAct != null) {
+                            addToHistory(readingAct, true);
+                        }
+                    }
+                } else {
+                    return activityRepository.save(readingActivity);
                 }
-            }else{
-                return activityRepository.save(readingActivity);
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,13 +98,26 @@ public class ActivityService {
         return null;
     }
 
+    //    add data to history if we save or update any activitied
+    private void addToHistory(ReadingActivity readingActivity, boolean isNew) {
+        try {
+            ReadHistory readHistory = new ReadHistory();
+            readHistory.setPagesRead(readingActivity.getPageNumber());
+            readHistory.setBookName(readingActivity.getBookName());
+            readHistory.setNew_act(isNew);
+            readHistoryRepo.save(readHistory);
+        } catch (Exception e) {
+            log.error("read activity data is not saved in history table");
+        }
+    }
+
     private void processDatesForAct(ReadingActivity activity) {
         if (activity.getPauseReadingBook() == null || activity.getPauseReadingBook()) {
             activity.setPauseReadingDate(new Date());
         }
     }
 
-    private void updateEntity(ReadingActivity saveEntity, ReadingActivity updatedEntity){
+    private void updateEntity(ReadingActivity saveEntity, ReadingActivity updatedEntity) {
         saveEntity.setBookName(updatedEntity.getBookName());
         saveEntity.setNote(updatedEntity.getNote());
         saveEntity.setPauseReadingDate(updatedEntity.getPauseReadingDate());
@@ -138,8 +160,8 @@ public class ActivityService {
         return allReadingActivity;
     }
 
-    private List<ReadingActivity> mapReadActivity(List<ReadingActivity> readingActivities){
-        if (!CollectionUtils.isEmpty(readingActivities)){
+    private List<ReadingActivity> mapReadActivity(List<ReadingActivity> readingActivities) {
+        if (!CollectionUtils.isEmpty(readingActivities)) {
             return readingActivities.stream().map(readingActivity -> {
                 readingActivity.setBookName(readingActivity.getBook() != null ? readingActivity.getBook().getBookName() : "");
                 return readingActivity;
@@ -161,9 +183,9 @@ public class ActivityService {
     public List<WeightActivity> viewAllWeightActivities() {
         try {
             List<WeightActivity> weightActivities = activityRepository.getAllWeightActivities();
-            if (!CollectionUtils.isEmpty(weightActivities)){
+            if (!CollectionUtils.isEmpty(weightActivities)) {
                 return weightActivities.stream()
-                        .sorted(Comparator.comparing(WeightActivity::getWeightDate, Comparator.nullsLast(Comparator.naturalOrder())))
+                        .sorted(Comparator.comparing(WeightActivity::getCreateDate).reversed())
                         .collect(Collectors.toList());
             }
         } catch (Exception e) {
@@ -171,7 +193,23 @@ public class ActivityService {
             log.error("Exception while reading all the weight activity");
         }
         return new ArrayList<>();
+    }
 
+    public void deleteWeightActivity(int id){
+        Activity activity = activityRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        if (activity != null){
+            try{
+                activityRepository.delete(activity);
+            }catch (Exception e){
+                log.error("exception occur while deleting the weight activity, id :" + id);
+            }
+        }
+
+    }
+
+    public List<ReadHistory> getAllReadHistory(){
+        List<ReadHistory> readHistoryList = readHistoryRepo.findAll();
+        return readHistoryList;
     }
 }
 
