@@ -2,6 +2,7 @@ package com.decipline.self.controller;
 
 
 import com.decipline.self.entities.Book;
+import com.decipline.self.entities.ExerciseRef;
 import com.decipline.self.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +37,5 @@ public class BookController {
     public Book getBook(@PathVariable int id){
         return bookService.getBook(id);
     }
+
 }

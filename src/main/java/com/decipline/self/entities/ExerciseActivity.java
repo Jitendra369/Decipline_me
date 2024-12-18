@@ -1,19 +1,22 @@
 package com.decipline.self.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "pushUp_activity")
-public class PushUpExeActivity extends AbstractExerciseActivity{
+public class ExerciseActivity extends Activity{
 
-    private String name;
+    private String logDate;
+    private String type;
+    private String count;
+
 
 }

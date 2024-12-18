@@ -1,15 +1,11 @@
 package com.decipline.self.controller;
 
-import com.decipline.self.dto.ActivityTotalCountDto;
-import com.decipline.self.dto.RefActivityTypeDto;
 import com.decipline.self.entities.*;
 import com.decipline.self.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,5 +64,36 @@ public class ActivityController {
         activityService.deleteWeightActivity(id);
     }
 
+    @GetMapping("/walk/all")
+    public List<WalkingActivity> findAllWeightAct(){
+        return activityService.getAllWeightActivity();
+    }
 
+// exe service
+
+    @PostMapping("/exe")
+    public ExerciseActivity addExerciseActivity(@RequestBody ExerciseActivity exerciseActivity){
+        return activityService.addExerciseActivity(exerciseActivity);
+    }
+
+    @GetMapping("/exe/{id}")
+    public ExerciseActivity viewExerciseAct(@PathVariable int id ){
+        Optional<? extends Activity> activityOptional = activityService.getActivity(id);
+        return (ExerciseActivity) activityOptional.orElse(null);
+    }
+
+    @GetMapping("/exe/all")
+    public List<ExerciseActivity> getAllExeActivity(){
+        return activityService.getAllExeActivity();
+    }
+
+    @PostMapping("/exe/type")
+    public boolean addExerciseType(@RequestBody ExerciseRef exerciseRef){
+        return activityService.addExerciseRefType(exerciseRef);
+    }
+
+    @GetMapping("/exe/ref")
+    public List<ExerciseRef> getAllRefExeType(){
+        return activityService.getAllRefTypes();
+    }
 }

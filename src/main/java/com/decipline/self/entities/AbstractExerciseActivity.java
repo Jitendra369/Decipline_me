@@ -6,12 +6,15 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
+import java.util.Date;
+
+//@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Table(name = "exercise_Activity")
+//@Table(name = "exercise_Activity")
 public class AbstractExerciseActivity extends Activity {
 
     private int count;
+    private Date logDate;
 }

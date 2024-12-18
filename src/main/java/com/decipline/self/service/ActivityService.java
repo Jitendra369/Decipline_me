@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -103,7 +104,7 @@ public class ActivityService {
         try {
             ReadHistory readHistory = new ReadHistory();
             readHistory.setPagesRead(readingActivity.getPageNumber());
-            readHistory.setBookName(readingActivity.getBookName());
+            readHistory.setBookName(readingActivity.getBook().getBookName());
             readHistory.setNew_act(isNew);
             readHistoryRepo.save(readHistory);
         } catch (Exception e) {
@@ -139,6 +140,8 @@ public class ActivityService {
                         return Optional.of((WalkingActivity) activity);
                     } else if (activity instanceof ReadingActivity) {
                         return Optional.of((ReadingActivity) activity);
+                    }else if (activity instanceof ExerciseActivity){
+                        return Optional.of((ExerciseActivity) activity);
                     }
                 }
             }
@@ -204,12 +207,34 @@ public class ActivityService {
                 log.error("exception occur while deleting the weight activity, id :" + id);
             }
         }
-
     }
+
+    public List<WalkingActivity> getAllWeightActivity(){
+        return activityRepository.getAllWalkingActivities();
+    }
+
 
     public List<ReadHistory> getAllReadHistory(){
         List<ReadHistory> readHistoryList = readHistoryRepo.findAll();
         return readHistoryList;
+    }
+
+    public ExerciseActivity addExerciseActivity(ExerciseActivity exerciseActivity){
+        return activityRepository.save(exerciseActivity);
+    }
+
+//    get All exercise Activities
+    public List<ExerciseActivity> getAllExeActivity(){
+        return activityRepository.getAllExeActivities();
+    }
+
+    public boolean addExerciseRefType(ExerciseRef exerciseRef){
+        return activityDAO.addExerciseRefData(exerciseRef);
+    }
+
+    public List<ExerciseRef> getAllRefTypes(){
+        List<ExerciseRef> allExeRefTypes = activityDAO.getAllExeRefTypes();
+        return allExeRefTypes;
     }
 }
 

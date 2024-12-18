@@ -1,9 +1,7 @@
 package com.decipline.self.repo;
 
 import com.decipline.self.dto.RefActivityTypeDto;
-import com.decipline.self.entities.Activity;
-import com.decipline.self.entities.ReadingActivity;
-import com.decipline.self.entities.WeightActivity;
+import com.decipline.self.entities.*;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,5 +38,11 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
     @Query("SELECT r FROM WeightActivity r")
     List<WeightActivity> getAllWeightActivities();
+
+    @Query("SELECT w FROM WalkingActivity w")
+    List<WalkingActivity> getAllWalkingActivities();
+
+    @Query("SELECT e FROM ExerciseActivity e")
+    List<ExerciseActivity> getAllExeActivities();
 
 }
