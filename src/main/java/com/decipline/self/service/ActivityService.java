@@ -152,6 +152,7 @@ public class ActivityService {
         return null;
     }
 
+
     public List<ReadingActivity> getAllReadingActivities() {
         List<ReadingActivity> allReadingActivity = new ArrayList<>();
         try {
